@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grady Maguire — East Texas Country</title>
+<meta name="description" content="Grady Maguire — Singer-songwriter out of Gilmer, Texas. Raw, honest East Texas country music.">
+<meta property="og:title" content="Grady Maguire — East Texas Country">
+<meta property="og:description" content="Singer-songwriter out of Gilmer, Texas.">
+<meta property="og:image" content="images/share.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#0A0A08;
+  color:#F0E8D8;
+  font-family:'Lora',Georgia,serif;
+  font-size:16px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0A0A08}
+::-webkit-scrollbar-thumb{background:#C8960C;border-radius:3px}
+
+/* ── TOKENS ── */
+:root{
+  --gold:#B03025;
+  --gold-light:#C94030;
+  --pine:#1E4D28;
+  --swallow:#1B5E8A;
+  --cream:#F0E4C8;
+  --cream-dim:#A89880;
+  --green:#1E4D28;
+  --dark:#0A0A08;
+  --dark2:#141410;
+  --dark3:#1E1E18;
+  --ff-display:'Playfair Display',Georgia,serif;
+  --ff-body:'Lora',Georgia,serif;
+  --ff-mono:'Space Mono',monospace;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 40px;
+  background:linear-gradient(to bottom,rgba(10,10,8,.98) 60%,transparent);
+  transition:padding .3s;
+}
+nav.scrolled{padding:12px 40px;background:rgba(10,10,8,.97)}
+.nav-logo{
+  font-family:var(--ff-display);
+  font-size:1.1rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{
+  font-family:var(--ff-mono);
+  font-size:.7rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--cream-dim);
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--gold)}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px}
+.nav-toggle span{display:block;width:24px;height:2px;background:var(--cream);margin:5px 0;transition:all .3s}
+
+/* ── HERO ── */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('images/hero.jpg') center center/cover no-repeat;
+  filter:grayscale(20%) brightness(.55);
+  transform:scale(1.04);
+  transition:transform 8s ease;
+}
+.hero-bg.loaded{transform:scale(1)}
+.hero-grain{
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.5;pointer-events:none;
+}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom, rgba(8,8,6,.6) 0%, rgba(8,8,6,.1) 30%, rgba(8,8,6,.1) 60%, rgba(8,8,6,.85) 100%);
+}
+.hero-content{
+  position:relative;z-index:2;
+  width:100%;
+  padding:140px 40px 80px;
+  max-width:700px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.hero-eyebrow{
+  font-family:var(--ff-mono);
+  font-size:.68rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::before{content:'';display:block;width:40px;height:1px;background:var(--gold)}
+.hero-name{
+  display:none;
+}
+.hero-name em{
+  display:block;
+  font-style:italic;
+  color:var(--gold);
+}
+.hero-tagline{
+  font-family:var(--ff-body);
+  font-style:italic;
+  font-size:1.2rem;
+  color:var(--cream-dim);
+  max-width:480px;
+  margin-bottom:36px;
+  line-height:1.6;
+  text-align:center;
+}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 28px;
+  font-family:var(--ff-mono);
+  font-size:.72rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all .2s;
+  border:none;
+}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:var(--gold-light)}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(240,232,216,.3)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.hero-scroll{
+  position:absolute;bottom:32px;right:40px;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.2em;
+  color:var(--cream-dim);text-transform:uppercase;
+}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollpulse 2s ease-in-out infinite}
+@keyframes scrollpulse{0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.1)}}
+
+/* ── PINE DIVIDER ── */
+.pine-divider{
+  width:100%;overflow:hidden;
+  line-height:0;
+  display:flex;justify-content:center;
+  padding:8px 0;
+  opacity:.35;
+}
+.pine-divider svg{width:100%;max-width:800px}
+
+/* ── SECTION BASE ── */
+.section{padding:100px 40px}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{
+  font-family:var(--ff-mono);
+  font-size:.65rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-label::before{content:'';display:block;width:30px;height:1px;background:var(--gold)}
+.section-title{
+  font-family:var(--ff-display);
+  font-size:clamp(2rem,5vw,3.5rem);
+  font-weight:700;
+  line-height:1.1;
+  margin-bottom:40px;
+}
+
+/* ── MUSIC ── */
+#music{background:var(--dark2)}
+.music-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.spotify-embed{
+  background:#111;
+  border-radius:12px;
+  overflow:hidden;
+  aspect-ratio:2/3;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(176,48,37,.15);
+}
+.spotify-placeholder{
+  text-align:center;padding:40px;
+}
+.spotify-placeholder .sp-icon{font-size:3rem;margin-bottom:16px;opacity:.4}
+.spotify-placeholder p{font-family:var(--ff-mono);font-size:.7rem;color:var(--cream-dim);letter-spacing:.1em}
+.stream-links{display:flex;flex-direction:column;gap:12px}
+.stream-link{
+  display:flex;align-items:center;gap:16px;
+  padding:16px 20px;
+  background:var(--dark3);
+  border:1px solid rgba(240,232,216,.06);
+  transition:all .2s;
+}
+.stream-link:hover{border-color:var(--gold);transform:translateX(4px)}
+.stream-link-icon{font-size:1.4rem;min-width:28px;display:flex;align-items:center}
+.stream-link-name{font-family:var(--ff-mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim)}
+.stream-link-arrow{margin-left:auto;color:var(--gold);font-size:.8rem;opacity:0;transition:opacity .2s}
+.stream-link:hover .stream-link-arrow{opacity:1}
+.music-bio{
+  font-size:1.05rem;
+  color:var(--cream-dim);
+  line-height:1.85;
+  margin-bottom:28px;
+}
+.music-bio strong{color:var(--cream);font-style:normal}
+
+/* ── ABOUT ── */
+#about{background:var(--dark)}
+.about-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center}
+.about-img-wrap{position:relative}
+.about-img{
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  object-position:top;
+  filter:sepia(15%) contrast(1.05);
+}
+.about-img-placeholder{
+  width:100%;aspect-ratio:3/4;
+  background:var(--dark3);
+  border:1px dashed rgba(176,48,37,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-mono);font-size:.7rem;color:rgba(176,48,37,.4);
+  letter-spacing:.1em;text-align:center;padding:20px;
+}
+.about-img-frame{
+  position:absolute;
+  top:16px;left:16px;right:-16px;bottom:-16px;
+  border:1px solid rgba(176,48,37,.2);
+  pointer-events:none;z-index:-1;
+}
+.about-text p{
+  font-size:1.05rem;
+  color:var(--cream-dim);
+  line-height:1.85;
+  margin-bottom:20px;
+}
+.about-text p strong{color:var(--cream)}
+.about-text p:first-of-type{
+  font-family:var(--ff-display);
+  font-style:italic;
+  font-size:1.3rem;
+  color:var(--cream);
+  line-height:1.6;
+}
+.about-stats{
+  display:flex;gap:32px;
+  margin-top:36px;
+  padding-top:32px;
+  border-top:1px solid rgba(240,232,216,.1);
+}
+.stat-val{
+  font-family:var(--ff-display);
+  font-size:2rem;
+  font-weight:700;
+  color:var(--gold);
+  line-height:1;
+}
+.stat-label{
+  font-family:var(--ff-mono);
+  font-size:.62rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--cream-dim);
+  margin-top:4px;
+}
+
+/* ── SHOWS ── */
+#shows{background:var(--dark2)}
+.shows-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px}
+.shows-list{display:flex;flex-direction:column;gap:1px}
+.show-item{
+  display:grid;
+  grid-template-columns:120px 1fr auto;
+  align-items:center;
+  gap:24px;
+  padding:22px 28px;
+  background:var(--dark3);
+  border-left:2px solid transparent;
+  transition:all .2s;
+}
+.show-item:hover{background:#1A1A14;border-left-color:var(--rose)}
+.show-date-block{
+  font-family:var(--ff-mono);
+  text-align:center;
+}
+.show-month{
+  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);display:block;
+}
+.show-day{
+  font-family:var(--ff-display);font-size:2.2rem;font-weight:700;
+  color:var(--cream);line-height:1;
+}
+.show-year{font-size:.65rem;letter-spacing:.1em;color:var(--cream-dim)}
+.show-info-venue{
+  font-family:var(--ff-display);font-size:1.1rem;font-weight:700;
+  color:var(--cream);margin-bottom:2px;
+}
+.show-info-loc{
+  font-family:var(--ff-mono);font-size:.68rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--cream-dim);
+}
+.show-info-type{
+  display:inline-block;margin-top:6px;
+  font-family:var(--ff-mono);font-size:.6rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:2px 10px;
+  border:1px solid rgba(176,48,37,.3);color:var(--gold);
+}
+.show-ticket-btn{
+  font-family:var(--ff-mono);font-size:.68rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:10px 20px;
+  border:1px solid rgba(240,232,216,.2);
+  color:var(--cream-dim);
+  white-space:nowrap;
+  transition:all .2s;
+}
+.show-ticket-btn:hover{border-color:var(--gold);color:var(--gold)}
+.shows-empty{
+  text-align:center;padding:60px 40px;
+  font-family:var(--ff-mono);font-size:.75rem;
+  letter-spacing:.1em;color:var(--cream-dim);
+  border:1px dashed rgba(240,232,216,.08);
+}
+.booking-cta{
+  margin-top:40px;padding:28px 32px;
+  background:var(--dark3);
+  border:1px solid rgba(176,48,37,.15);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+.booking-cta-text p:first-child{
+  font-family:var(--ff-display);font-size:1.2rem;font-weight:700;
+  margin-bottom:4px;
+}
+.booking-cta-text p:last-child{
+  font-size:.9rem;color:var(--cream-dim);
+}
+
+/* ── MERCH ── */
+#merch{background:var(--dark)}
+.merch-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-bottom:40px}
+.merch-card{
+  background:var(--dark3);
+  border:1px solid rgba(240,232,216,.06);
+  overflow:hidden;
+  transition:all .2s;
+  cursor:pointer;
+}
+.merch-card:hover{border-color:rgba(176,48,37,.4);transform:translateY(-3px)}
+.merch-card-img{
+  width:100%;aspect-ratio:1;
+  object-fit:cover;
+  background:#111;
+}
+.merch-card-img-placeholder{
+  width:100%;aspect-ratio:1;
+  background:#111;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;
+  color:rgba(176,48,37,.2);
+}
+.merch-card-body{padding:16px 18px}
+.merch-card-name{
+  font-family:var(--ff-display);font-size:1rem;font-weight:700;
+  margin-bottom:4px;
+}
+.merch-card-price{
+  font-family:var(--ff-mono);font-size:.75rem;
+  color:var(--gold);letter-spacing:.05em;
+}
+.merch-banner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:24px 32px;
+  background:var(--dark3);
+  border:1px solid rgba(176,48,37,.2);
+  flex-wrap:wrap;gap:16px;
+}
+.merch-banner p{font-size:.95rem;color:var(--cream-dim)}
+.merch-banner strong{color:var(--cream)}
+
+/* ── CONTACT / BOOKING ── */
+#contact{background:var(--dark2)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:start}
+.contact-intro{font-size:1rem;color:var(--cream-dim);line-height:1.8;margin-bottom:32px}
+.social-links{display:flex;flex-direction:column;gap:8px;margin-bottom:40px}
+.social-link{
+  display:flex;align-items:center;gap:14px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(240,232,216,.07);
+  transition:all .2s;
+}
+.social-link:hover{color:var(--gold);padding-left:6px}
+.social-link-icon{font-size:1.1rem;min-width:24px;display:flex;align-items:center}
+.social-link-handle{font-family:var(--ff-mono);font-size:.75rem;letter-spacing:.1em}
+.contact-email-block{
+  padding:20px 24px;
+  background:var(--dark3);
+  border-left:2px solid var(--rose);
+}
+.contact-email-label{
+  font-family:var(--ff-mono);font-size:.62rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px;
+}
+.contact-email-addr{
+  font-family:var(--ff-display);font-size:1.1rem;font-weight:700;
+}
+.form{display:flex;flex-direction:column;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{
+  font-family:var(--ff-mono);font-size:.65rem;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cream-dim);
+}
+.form-input,.form-select,.form-textarea{
+  background:var(--dark3);
+  border:1px solid rgba(240,232,216,.12);
+  color:var(--cream);
+  font-family:var(--ff-body);
+  font-size:.95rem;
+  padding:13px 16px;
+  outline:none;
+  transition:border-color .2s;
+  width:100%;
+  -webkit-appearance:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-textarea{min-height:140px;resize:vertical}
+.form-select{cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-success{
+  display:none;
+  text-align:center;padding:40px 20px;
+  font-family:var(--ff-display);font-style:italic;font-size:1.2rem;
+  color:var(--gold);
+}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--dark);
+  border-top:1px solid rgba(240,232,216,.07);
+  padding:48px 40px 32px;
+}
+.footer-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:24px;
+}
+.footer-logo{
+  font-family:var(--ff-display);font-size:1.4rem;font-weight:900;
+  color:var(--cream);
+}
+.footer-logo span{color:var(--gold)}
+.footer-links{display:flex;gap:24px;list-style:none}
+.footer-links a{
+  font-family:var(--ff-mono);font-size:.65rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cream-dim);transition:color .2s;
+}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{
+  width:100%;
+  font-family:var(--ff-mono);font-size:.62rem;
+  letter-spacing:.1em;color:rgba(168,152,128,.4);
+  text-align:center;margin-top:24px;
+  padding-top:24px;border-top:1px solid rgba(240,232,216,.05);
+}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:16px 20px}
+  nav.scrolled{padding:12px 20px}
+  .nav-links{
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(10,10,8,.98);
+    flex-direction:column;align-items:center;justify-content:center;gap:32px;
+    transform:translateX(100%);transition:transform .3s ease;z-index:90;
+  }
+  .nav-links.open{transform:translateX(0)}
+  .nav-links a{font-size:.9rem}
+  .nav-toggle{display:block;z-index:95}
+  .hero-content{padding:100px 20px 60px}
+  .section{padding:70px 20px}
+  .music-grid,.about-grid,.contact-grid{grid-template-columns:1fr}
+  .show-item{grid-template-columns:80px 1fr;gap:16px;padding:16px}
+  .show-ticket-btn{display:none}
+  .about-img-frame{display:none}
+  .footer-inner{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+  .hero-scroll{display:none}
+  .about-stats{gap:20px}
+  .form-row{grid-template-columns:1fr}
+  .booking-cta{flex-direction:column}
+  .shows-header{flex-direction:column;align-items:flex-start}
+  .merch-banner{flex-direction:column}
+}
+
+/* ── ANIMATIONS ── */
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Grady Maguire</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#music" onclick="closeNav()">Music</a></li>
+    <li><a href="#about" onclick="closeNav()">About</a></li>
+    <li><a href="#shows" onclick="closeNav()">Shows</a></li>
+    <li><a href="#merch" onclick="closeNav()">Merch</a></li>
+    <li><a href="#contact" onclick="closeNav()">Booking</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Texas Country · Gilmer, TX</div>
+    <h1 class="hero-name">
+      Grady<em>Maguire</em>
+    </h1>
+    <p class="hero-tagline">Raw, honest, and nowhere to hide behind 'em.</p>
+    <div class="hero-actions">
+      <a href="#music" class="btn btn-gold">Listen Now</a>
+      <a href="#shows" class="btn btn-outline">Upcoming Shows</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- LOGO BAND -->
+<div style="background:#0A0A08;padding:48px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid rgba(176,48,37,.15)">
+  <img src="images/logo.png" alt="Grady Maguire" style="width:min(320px,65vw);display:block;filter:drop-shadow(0 4px 24px rgba(0,0,0,.6))" class="fade-in">
+</div>
+
+
+<!-- PINE DIVIDER -->
+<div class="pine-divider" aria-hidden="true">
+  <svg viewBox="0 0 800 60" xmlns="http://www.w3.org/2000/svg" fill="#1E4D28">
+    <polygon points="60,50 75,20 90,50"/><polygon points="55,50 75,5 95,50"/>
+    <polygon points="130,50 148,18 166,50"/><polygon points="124,50 148,2 172,50"/>
+    <polygon points="200,50 215,22 230,50"/><polygon points="195,50 215,8 235,50"/>
+    <polygon points="300,50 320,15 340,50"/><polygon points="293,50 320,0 347,50"/>
+    <polygon points="390,50 408,20 426,50"/><polygon points="384,50 408,5 432,50"/>
+    <polygon points="460,50 478,22 496,50"/><polygon points="454,50 478,7 502,50"/>
+    <polygon points="560,50 580,16 600,50"/><polygon points="553,50 580,1 607,50"/>
+    <polygon points="640,50 658,20 676,50"/><polygon points="634,50 658,6 682,50"/>
+    <polygon points="720,50 737,22 754,50"/><polygon points="714,50 737,8 760,50"/>
+    <rect x="0" y="49" width="800" height="2" fill="#1E4D28" opacity=".4"/>
+  </svg>
+</div>
+
+<!-- MUSIC -->
+<section class="section" id="music">
+  <div class="section-inner">
+    <div class="music-grid">
+      <div>
+        <div class="section-label fade-in">Music</div>
+        <h2 class="section-title fade-in">Stream <em style="font-style:italic;color:var(--gold)">Grady</em></h2>
+        <p class="music-bio fade-in">
+          Grady Maguire writes songs that feel <strong>earned</strong> — gritty, honest country that doesn't dress up or apologize. The kind of music that smells like red dirt and pine sap.
+        </p>
+        <p class="music-bio fade-in">
+          New music coming. Get notified when it drops — follow on your platform of choice.
+        </p>
+        <div class="stream-links fade-in">
+          <a href="YOUR_SPOTIFY_LINK" target="_blank" rel="noopener" class="stream-link">
+            <span class="stream-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <circle cx="12" cy="12" r="12" fill="#1DB954"/>
+  <path fill="white" d="M17.9 10.9C14.7 9 9.35 8.8 6.3 9.75c-.5.15-1-.15-1.15-.6-.15-.5.15-1 .6-1.15 3.55-1.05 9.4-.85 13.1 1.35.45.25.6.85.35 1.3-.25.35-.85.5-1.3.25zm-.1 2.8c-.25.35-.7.5-1.05.25-2.7-1.65-6.8-2.15-9.95-1.15-.4.1-.85-.1-.95-.5-.1-.4.1-.85.5-.95 3.65-1.1 8.15-.55 11.25 1.35.3.15.45.65.2 1zm-1.2 2.75c-.2.3-.55.4-.85.2-2.35-1.45-5.3-1.75-8.8-.95-.3.1-.65-.1-.75-.45-.1-.3.1-.65.45-.75 3.8-.85 7.1-.5 9.7 1.1.35.2.4.55.25.85z"/>
+</svg></span>
+            <span class="stream-link-name">Spotify</span>
+            <span class="stream-link-arrow">→</span>
+          </a>
+          <a href="YOUR_APPLE_MUSIC_LINK" target="_blank" rel="noopener" class="stream-link">
+            <span class="stream-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <defs>
+    <linearGradient id="am-grad" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FA233B"/>
+      <stop offset="100%" stop-color="#FB5C74"/>
+    </linearGradient>
+  </defs>
+  <rect width="24" height="24" rx="5.5" fill="url(#am-grad)"/>
+  <path fill="white" d="M15.7 5.5H9.5c-.4 0-.8.3-.8.8V15c-.4-.2-.8-.3-1.3-.3-1.4 0-2.4.9-2.4 2.1S6.6 19 8 19c1.3 0 2.3-.9 2.3-2V9.5l6.2-1.3v4.5c-.4-.2-.8-.3-1.3-.3-1.4 0-2.4.9-2.4 2.1s1 2.1 2.4 2.1c1.3 0 2.3-.9 2.3-2V6.3c0-.4-.4-.8-.8-.8z"/>
+</svg></span>
+            <span class="stream-link-name">Apple Music</span>
+            <span class="stream-link-arrow">→</span>
+          </a>
+          <a href="https://www.youtube.com/@gradymaguireyeah" target="_blank" rel="noopener" class="stream-link">
+            <span class="stream-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <path fill="#FF0000" d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.49 3.5 12 3.5 12 3.5s-7.49 0-9.38.55A3.02 3.02 0 00.5 6.19C0 8.1 0 12 0 12s0 3.9.5 5.81a3.02 3.02 0 002.12 2.14C4.51 20.5 12 20.5 12 20.5s7.49 0 9.38-.55a3.02 3.02 0 002.12-2.14C24 15.9 24 12 24 12s0-3.9-.5-5.81z"/>
+  <path fill="white" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+</svg></span>
+            <span class="stream-link-name">YouTube</span>
+            <span class="stream-link-arrow">→</span>
+          </a>
+          <a href="https://www.tiktok.com/@gradymaguire" target="_blank" rel="noopener" class="stream-link">
+            <span class="stream-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <rect width="24" height="24" rx="5" fill="#010101"/>
+  <path fill="#EE1D52" d="M19 9.5a4.83 4.83 0 01-3.77-4.25V4h-2.68v10.83a2.25 2.25 0 01-2.25 2.17 2.25 2.25 0 01-2.25-2.25 2.25 2.25 0 012.25-2.25c.22 0 .43.04.62.09V9.84a4.93 4.93 0 00-.62-.04 4.92 4.92 0 00-4.92 4.93 4.92 4.92 0 004.92 4.92 4.92 4.92 0 004.92-4.92V9.05a7.38 7.38 0 004.32 1.38V7.77A4.84 4.84 0 0119 9.5z"/>
+  <path fill="#69C9D0" d="M18.45 9.24a4.83 4.83 0 01-3.22-4.24h-1V5h1a4.83 4.83 0 003.8 4.57 4.84 4.84 0 01-.58-.33zM10.3 12.58a2.25 2.25 0 00-1.63 2.17 2.25 2.25 0 002.25 2.25 2.25 2.25 0 001.12-.3 2.25 2.25 0 01-2.25-2.25c0-.67.3-1.28.77-1.7a4.93 4.93 0 00-.26-.17z"/>
+</svg></span>
+            <span class="stream-link-name">TikTok</span>
+            <span class="stream-link-arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div class="spotify-embed fade-in">
+        <!-- REPLACE this div with your Spotify embed iframe when you have it -->
+        <!-- Example: <iframe src="https://open.spotify.com/embed/artist/YOUR_ID" width="100%" height="100%" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
+        <div class="spotify-placeholder">
+          <div class="sp-icon">🎸</div>
+          <p>Spotify player<br>coming soon</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PINE DIVIDER -->
+<div class="pine-divider" aria-hidden="true">
+  <svg viewBox="0 0 800 60" xmlns="http://www.w3.org/2000/svg" fill="#1E4D28">
+    <polygon points="40,50 58,18 76,50"/><polygon points="34,50 58,3 82,50"/>
+    <polygon points="160,50 180,15 200,50"/><polygon points="153,50 180,0 207,50"/>
+    <polygon points="260,50 278,20 296,50"/><polygon points="254,50 278,5 302,50"/>
+    <polygon points="360,50 382,14 404,50"/><polygon points="353,50 382,0 411,50"/>
+    <polygon points="480,50 498,20 516,50"/><polygon points="474,50 498,5 522,50"/>
+    <polygon points="580,50 600,17 620,50"/><polygon points="573,50 600,2 627,50"/>
+    <polygon points="700,50 718,22 736,50"/><polygon points="694,50 718,7 742,50"/>
+    <rect x="0" y="49" width="800" height="2" fill="#1E4D28" opacity=".4"/>
+  </svg>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-img-wrap fade-in">
+        <!-- REPLACE src with: images/about.jpg -->
+        <!-- Use the sepia/western shot (black hat, rope, wood panel background) -->
+        <img src="images/about.jpg" alt="Grady Maguire" class="about-img"
+          onerror="this.outerHTML='<div class=\'about-img-placeholder\'>📷 Place about.jpg here<br>(use the black hat / rope photo)</div>'">
+        <div class="about-img-frame"></div>
+      </div>
+      <div class="about-text">
+        <div class="section-label fade-in">About</div>
+        <h2 class="section-title fade-in">Songs from the<br><em style="color:var(--gold)">Piney Woods</em></h2>
+        <div class="fade-in">
+          <p>Grady Maguire is a singer-songwriter out of Gilmer, Texas — where the stories tend to stick to you.</p>
+          <p>Grady writes country music that doesn't dress up or apologize. It's the kind of songwriting that comes from actually living something — gritty, honest, and deeply rooted in the people and places he knows.</p>
+          <p>He's taken his songs to stages across <strong>Texas, Oklahoma, and Arizona</strong>, building a following the old-fashioned way: one show at a time, one song at a time, with nothing to hide behind but the truth of it.</p>
+        </div>
+        <div class="about-stats fade-in">
+          <div>
+            <div class="stat-val">TX</div>
+            <div class="stat-label">Oklahoma<br>& Arizona</div>
+          </div>
+          <div>
+            <div class="stat-val">100%</div>
+            <div class="stat-label">Original<br>songwriter</div>
+          </div>
+          <div>
+            <div class="stat-val">East<br style="display:block">Texas</div>
+            <div class="stat-label">Gilmer, TX<br>roots</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PINE DIVIDER -->
+<div class="pine-divider" aria-hidden="true">
+  <svg viewBox="0 0 800 60" xmlns="http://www.w3.org/2000/svg" fill="#1E4D28">
+    <polygon points="60,50 75,20 90,50"/><polygon points="55,50 75,5 95,50"/>
+    <polygon points="200,50 218,16 236,50"/><polygon points="194,50 218,1 242,50"/>
+    <polygon points="310,50 330,18 350,50"/><polygon points="303,50 330,3 357,50"/>
+    <polygon points="440,50 460,15 480,50"/><polygon points="433,50 460,0 487,50"/>
+    <polygon points="540,50 558,20 576,50"/><polygon points="534,50 558,5 582,50"/>
+    <polygon points="660,50 680,17 700,50"/><polygon points="653,50 680,2 707,50"/>
+    <polygon points="740,50 757,22 774,50"/><polygon points="734,50 757,7 780,50"/>
+    <rect x="0" y="49" width="800" height="2" fill="#1E4D28" opacity=".4"/>
+  </svg>
+</div>
+
+<!-- SHOWS -->
+<section class="section" id="shows">
+  <div class="section-inner">
+    <div class="shows-header">
+      <div>
+        <div class="section-label">Live</div>
+        <h2 class="section-title" style="margin-bottom:0">Upcoming Shows</h2>
+      </div>
+      <a href="#contact" class="btn btn-outline">Book Grady →</a>
+    </div>
+
+    <!-- SHOWS LIST — Add/edit shows here -->
+    <div class="shows-list" id="shows-list">
+      <div class="shows-loading">Loading shows...</div>
+    </div>
+
+    <div class="booking-cta fade-in">
+      <div class="booking-cta-text">
+        <p>Want Grady at your venue or event?</p>
+        <p>Reach out for booking inquiries, private events, and festival appearances.</p>
+      </div>
+      <a href="#contact" class="btn btn-gold">Send a Booking Inquiry</a>
+    </div>
+  </div>
+</section>
+
+<!-- PINE DIVIDER -->
+<div class="pine-divider" aria-hidden="true">
+  <svg viewBox="0 0 800 60" xmlns="http://www.w3.org/2000/svg" fill="#1E4D28">
+    <polygon points="80,50 100,16 120,50"/><polygon points="73,50 100,1 127,50"/>
+    <polygon points="220,50 240,20 260,50"/><polygon points="213,50 240,5 267,50"/>
+    <polygon points="360,50 382,14 404,50"/><polygon points="353,50 382,0 411,50"/>
+    <polygon points="480,50 500,18 520,50"/><polygon points="473,50 500,3 527,50"/>
+    <polygon points="610,50 630,15 650,50"/><polygon points="603,50 630,0 657,50"/>
+    <polygon points="720,50 738,20 756,50"/><polygon points="714,50 738,5 762,50"/>
+    <rect x="0" y="49" width="800" height="2" fill="#1E4D28" opacity=".4"/>
+  </svg>
+</div>
+
+<!-- MERCH -->
+<section class="section" id="merch">
+  <div class="section-inner">
+    <div class="section-label fade-in">Merch</div>
+    <h2 class="section-title fade-in">Wear the <em style="color:var(--gold)">Woods</em></h2>
+
+    <div class="merch-grid">
+      <!-- MERCH CARD 1 -->
+      <div class="merch-card fade-in" onclick="window.open('YOUR_FOURTHWALL_LINK','_blank')">
+        <!-- Replace src with: images/merch-black-tee.jpg -->
+        <img src="images/merch-black.jpg" alt="Grady Maguire Black Tee" class="merch-card-img"
+          onerror="this.outerHTML='<div class=\'merch-card-img-placeholder\'>👕</div>'">
+        <div class="merch-card-body">
+          <div class="merch-card-name">Classic Logo Tee — Black</div>
+          <div class="merch-card-price">$28.00</div>
+        </div>
+      </div>
+      <!-- MERCH CARD 2 -->
+      <div class="merch-card fade-in" onclick="window.open('YOUR_FOURTHWALL_LINK','_blank')">
+        <!-- Replace src with: images/merch-white-tee.jpg -->
+        <img src="images/merch-white.jpg" alt="Grady Maguire White Tee" class="merch-card-img"
+          onerror="this.outerHTML='<div class=\'merch-card-img-placeholder\'>👕</div>'">
+        <div class="merch-card-body">
+          <div class="merch-card-name">Classic Logo Tee — White</div>
+          <div class="merch-card-price">$28.00</div>
+        </div>
+      </div>
+      <!-- MERCH CARD 3 — placeholder for future items -->
+      <div class="merch-card fade-in" onclick="window.open('YOUR_FOURTHWALL_LINK','_blank')" style="opacity:.5">
+        <div class="merch-card-img-placeholder">🎸</div>
+        <div class="merch-card-body">
+          <div class="merch-card-name">More Coming Soon</div>
+          <div class="merch-card-price">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="merch-banner fade-in">
+      <div>
+        <p><strong>Shop the full store on Fourthwall.</strong></p>
+        <p>All orders ship direct. Print-on-demand so every shirt is made fresh.</p>
+      </div>
+      <a href="YOUR_FOURTHWALL_LINK" target="_blank" rel="noopener" class="btn btn-gold">Shop All Merch →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PINE DIVIDER -->
+<div class="pine-divider" aria-hidden="true">
+  <svg viewBox="0 0 800 60" xmlns="http://www.w3.org/2000/svg" fill="#1E4D28">
+    <polygon points="40,50 60,17 80,50"/><polygon points="33,50 60,2 87,50"/>
+    <polygon points="180,50 200,19 220,50"/><polygon points="173,50 200,4 227,50"/>
+    <polygon points="330,50 352,14 374,50"/><polygon points="323,50 352,0 381,50"/>
+    <polygon points="450,50 470,20 490,50"/><polygon points="443,50 470,5 497,50"/>
+    <polygon points="570,50 592,16 614,50"/><polygon points="563,50 592,1 621,50"/>
+    <polygon points="690,50 710,18 730,50"/><polygon points="683,50 710,3 737,50"/>
+    <rect x="0" y="49" width="800" height="2" fill="#1E4D28" opacity=".4"/>
+  </svg>
+</div>
+
+<!-- CONTACT / BOOKING -->
+<section class="section" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div>
+        <div class="section-label fade-in">Booking & Contact</div>
+        <h2 class="section-title fade-in">Get in <em style="color:var(--gold)">Touch</em></h2>
+        <p class="contact-intro fade-in">For booking inquiries, venue shows, private events, festivals, and general management — reach out below or email directly.</p>
+
+        <div class="contact-email-block fade-in">
+          <div class="contact-email-label">Booking email</div>
+          <div class="contact-email-addr">booking@gradymaguiremusic.com</div>
+        </div>
+
+        <div style="margin-top:28px" class="fade-in">
+          <div class="section-label" style="margin-bottom:16px">Follow Grady</div>
+          <div class="social-links">
+            <a href="https://www.instagram.com/gradymaguiremusic" target="_blank" rel="noopener" class="social-link">
+              <span class="social-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <defs>
+    <radialGradient id="ig2" cx="30%" cy="107%" r="150%">
+      <stop offset="0%" stop-color="#fdf497"/>
+      <stop offset="5%" stop-color="#fdf497"/>
+      <stop offset="45%" stop-color="#fd5949"/>
+      <stop offset="60%" stop-color="#d6249f"/>
+      <stop offset="90%" stop-color="#285AEB"/>
+    </radialGradient>
+  </defs>
+  <rect width="24" height="24" rx="6" fill="url(#ig2)"/>
+  <circle cx="12" cy="12" r="4.8" fill="none" stroke="white" stroke-width="1.6"/>
+  <rect x="16.5" y="5.5" width="2" height="2" rx=".5" fill="white"/>
+  <rect x="3" y="3" width="18" height="18" rx="4.5" fill="none" stroke="white" stroke-width="1.5"/>
+</svg></span>
+              <span class="social-link-handle">@gradymaguiremusic</span>
+            </a>
+            <a href="https://www.tiktok.com/@gradymaguire" target="_blank" rel="noopener" class="social-link">
+              <span class="social-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <rect width="24" height="24" rx="5" fill="#010101"/>
+  <path fill="#EE1D52" d="M19 9.5a4.83 4.83 0 01-3.77-4.25V4h-2.68v10.83a2.25 2.25 0 01-2.25 2.17 2.25 2.25 0 01-2.25-2.25 2.25 2.25 0 012.25-2.25c.22 0 .43.04.62.09V9.84a4.93 4.93 0 00-.62-.04 4.92 4.92 0 00-4.92 4.93 4.92 4.92 0 004.92 4.92 4.92 4.92 0 004.92-4.92V9.05a7.38 7.38 0 004.32 1.38V7.77A4.84 4.84 0 0119 9.5z"/>
+  <path fill="#69C9D0" d="M18.45 9.24a4.83 4.83 0 01-3.22-4.24h-1V5h1a4.83 4.83 0 003.8 4.57 4.84 4.84 0 01-.58-.33zM10.3 12.58a2.25 2.25 0 00-1.63 2.17 2.25 2.25 0 002.25 2.25 2.25 2.25 0 001.12-.3 2.25 2.25 0 01-2.25-2.25c0-.67.3-1.28.77-1.7a4.93 4.93 0 00-.26-.17z"/>
+</svg></span>
+              <span class="social-link-handle">@gradymaguire</span>
+            </a>
+            <a href="https://www.youtube.com/@gradymaguireyeah" target="_blank" rel="noopener" class="social-link">
+              <span class="social-link-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" style="flex-shrink:0">
+  <path fill="#FF0000" d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.49 3.5 12 3.5 12 3.5s-7.49 0-9.38.55A3.02 3.02 0 00.5 6.19C0 8.1 0 12 0 12s0 3.9.5 5.81a3.02 3.02 0 002.12 2.14C4.51 20.5 12 20.5 12 20.5s7.49 0 9.38-.55a3.02 3.02 0 002.12-2.14C24 15.9 24 12 24 12s0-3.9-.5-5.81z"/>
+  <path fill="white" d="M9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+</svg></span>
+              <span class="social-link-handle">@gradymaguireyeah</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Netlify form — submissions go straight to your Netlify dashboard + email -->
+      <form class="form fade-in" name="booking" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="booking">
+        <input type="hidden" name="bot-field" style="display:none">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your name</label>
+            <input type="text" name="name" class="form-input" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone (optional)</label>
+          <input type="tel" name="phone" class="form-input" placeholder="(XXX) XXX-XXXX">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Inquiry type</label>
+          <select name="inquiry-type" class="form-select">
+            <option value="">Select one</option>
+            <option>Venue / bar booking</option>
+            <option>Festival / event</option>
+            <option>Private event</option>
+            <option>Press / media</option>
+            <option>General</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Venue / event name</label>
+            <input type="text" name="venue" class="form-input" placeholder="Venue or event">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Proposed date</label>
+            <input type="text" name="date" class="form-input" placeholder="Date or range">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea name="message" class="form-textarea" placeholder="Tell us about the show, event, or inquiry..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center">Send Inquiry →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Grady <span>Maguire</span></div>
+    <ul class="footer-links">
+      <li><a href="#music">Music</a></li>
+      <li><a href="#shows">Shows</a></li>
+      <li><a href="#merch">Merch</a></li>
+      <li><a href="#contact">Booking</a></li>
+    </ul>
+  </div>
+  <div class="footer-copy">
+    © 2025 Grady Maguire · Gilmer, Texas · All rights reserved · booking@gradymaguiremusic.com
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>60);
+});
+
+// Mobile nav
+function toggleNav(){
+  const links=document.getElementById('nav-links');
+  const toggle=document.getElementById('nav-toggle');
+  links.classList.toggle('open');
+  const spans=toggle.querySelectorAll('span');
+  if(links.classList.contains('open')){
+    spans[0].style.transform='rotate(45deg) translate(5px,5px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(5px,-5px)';
+  } else {
+    spans.forEach(s=>{s.style.transform='';s.style.opacity='';});
+  }
+}
+function closeNav(){
+  const links=document.getElementById('nav-links');
+  links.classList.remove('open');
+  document.getElementById('nav-toggle').querySelectorAll('span').forEach(s=>{s.style.transform='';s.style.opacity='';});
+}
+
+// Hero image load
+window.addEventListener('load',()=>{
+  document.getElementById('hero-bg').classList.add('loaded');
+});
+
+// Scroll fade-in
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:0.12});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+</script>
+
+<script>
+// ── LIVE SHOWS FROM GOOGLE SHEET ──────────────────────────────
+// To update shows: edit your Google Sheet. Changes appear on the site automatically.
+// Sheet ID is set in Netlify environment variable SHOWS_SHEET_ID
+// OR hardcode it below: replace 'YOUR_SHEET_ID' with your actual Sheet ID
+
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTSjAmmqBd8IUFiuNGfqlfdQCprrOgIKRyT2jxBF1Ry2vi9gu4G7fYf8RQDsZcqSi2OJgTxtn1-Xirx/pub?output=csv&gid=0';
+
+async function loadShows() {
+  const container = document.getElementById('shows-list');
+  if (!container) return;
+  try {
+    const res = await fetch(SHEET_URL);
+    if (!res.ok) throw new Error('fetch failed');
+    const csv = await res.text();
+    const shows = parseCSV(csv);
+    console.log('Raw shows from sheet:', shows.length, shows);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const upcoming = shows
+      .filter(s => s.Venue && s.Date && (!s.Status || s.Status === 'Confirmed' || s.Status === 'Pending'))
+      .filter(s => { try { return parseDate(s.Date) >= today; } catch(e){ return true; }})
+      .sort((a,b) => parseDate(a.Date) - parseDate(b.Date));
+    container.innerHTML = upcoming.length ? upcoming.map(renderShow).join('') : renderEmptyShows();
+    container.querySelectorAll('.show-item').forEach(el => { try { observer.observe(el); } catch(e){} });
+  } catch(e) {
+    console.log('Shows error:', e);
+    container.innerHTML = renderEmptyShows();
+  }
+}
+
+function parseDate(str) {
+  if (!str) return new Date(0);
+  str = str.trim().replace(/^"|"$/g, '');
+  if (!str) return new Date(0);
+
+  // Google Sheets serial number (e.g. 46941)
+  if (/^\d{4,6}$/.test(str) && Number(str) > 40000) {
+    return new Date((Number(str) - 25569) * 86400 * 1000);
+  }
+
+  // M/D/YYYY or MM/DD/YYYY or M/D/YY
+  if (str.includes('/')) {
+    const parts = str.split('/');
+    if (parts.length === 3) {
+      const [a, b, c] = parts;
+      // Could be M/D/YYYY (US) or D/M/YYYY (UK) — assume US
+      const year = c.length === 2 ? '20' + c : c;
+      return new Date(year + '-' + a.padStart(2,'0') + '-' + b.padStart(2,'0') + 'T12:00:00');
+    }
+  }
+
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+    return new Date(str.substring(0,10) + 'T12:00:00');
+  }
+
+  // Fallback — let JS try
+  const d = new Date(str);
+  return isNaN(d) ? new Date(0) : d;
+}
+
+function splitCSVRow(row) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < row.length; i++) {
+    const c = row[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+    else { cur += c; }
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function parseCSV(csv) {
+  const lines = csv.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+  const headers = splitCSVRow(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = splitCSVRow(line);
+    const obj = {};
+    headers.forEach((h,i) => { obj[h] = (vals[i]||'').trim(); });
+    return obj;
+  }).filter(r => r.Date || r.Venue);
+}
+
+
+function renderShow(s) {
+  const d = new Date(s.Date + 'T12:00:00');
+  const month = d.toLocaleDateString('en-US',{month:'short'}).toUpperCase();
+  const day = d.getDate();
+  const year = d.getFullYear();
+  const sc = {Confirmed:'badge-green',Pending:'badge-amber',Completed:'badge-blue',Cancelled:'badge-red'};
+  const badge = sc[s.Status] || 'badge-gray';
+  const ticket = s['Ticket URL'] ? `<a href="${s['Ticket URL']}" target="_blank" rel="noopener" class="show-ticket-btn">Tickets →</a>` : '';
+  return `<div class="show-item fade-in">
+    <div class="show-date-block">
+      <span class="show-month">${month}</span>
+      <div class="show-day">${day}</div>
+      <div class="show-year">${year}</div>
+    </div>
+    <div>
+      <div class="show-info-venue">${s.Venue}</div>
+      <div class="show-info-loc">📍 ${s.City}${s.State?', '+s.State:''}</div>
+      ${s['Show Type']?`<span class="show-info-type">${s['Show Type']}</span>`:''}
+      ${s.Notes?`<div style="font-size:11px;color:var(--cream-dim);margin-top:4px">${s.Notes}</div>`:''}
+    </div>
+    <span class="badge ${badge}" style="align-self:flex-start">${s.Status}</span>
+    ${ticket}
+  </div>`;
+}
+
+function renderEmptyShows() {
+  return `<div class="shows-empty">No shows currently listed — check back soon.<br>
+    <a href="https://www.instagram.com/gradymaguiremusic" target="_blank"
+      style="color:var(--gold);font-family:var(--ff-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;margin-top:12px;display:inline-block">
+      Follow on Instagram for updates →</a></div>`;
+}
+
+loadShows();
+</script>
+
+</body>
+</html>
