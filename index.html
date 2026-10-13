@@ -218,7 +218,9 @@ h2 em{font-style:italic;color:var(--rose-bright)}
   transition:background .25s;
 }
 .show-row:hover{background:rgba(240,228,200,.03)}
-.show-date{color:var(--rose-bright);font-weight:700}
+.show-date{color:var(--rose-bright);font-weight:700;line-height:1.25}
+.show-date small{display:block;font-weight:400;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--parchment-dim);margin-top:3px}
+.show-notes{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--parchment-dim);margin-top:4px}
 .show-venue{font-family:var(--serif);font-size:1.25rem;letter-spacing:0}
 .show-city{color:var(--parchment-dim)}
 .show-link a{text-decoration:none;border:1px solid var(--line);padding:9px 16px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;transition:.2s;color:var(--parchment-dim)}
@@ -522,6 +524,17 @@ const CONFIG = {
   // Live shows — published Google Sheet CSV (existing sheet)
   showsCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSjAmmqBd8IUFiuNGfqlfdQCprrOgIKRyT2jxBF1Ry2vi9gu4G7fYf8RQDsZcqSi2OJgTxtn1-Xirx/pub?output=csv",
 
+  // Extra shows not (yet) in the sheet. Same fields as the sheet; once a row is added to the sheet
+  // with the same date + venue, the duplicate here is ignored automatically. Past dates drop off by themselves.
+  extraShows: [
+    { date:"2026-11-14", venue:"South Tyler Speakeasy", city:"Tyler",     state:"TX", notes:"w/ Matt Stamps & Hunter Lohr" },
+    { date:"2026-12-19", venue:"Hopkins Icehouse",      city:"Texarkana", state:"AR", notes:"w/ Jesica Peacock" },
+    { date:"2027-01-08", venue:"Leon's Steakhouse",     city:"Longview",  state:"TX" },
+    { date:"2027-04-05", venue:"Leon's Steakhouse",     city:"Longview",  state:"TX" },
+    { date:"2027-07-02", venue:"Leon's Steakhouse",     city:"Longview",  state:"TX" },
+    { date:"2027-10-01", venue:"Leon's Steakhouse",     city:"Longview",  state:"TX" },
+  ],
+
   // Featured video: type "youtube" | "vimeo" | "drive", id = video ID / Drive file ID
   featuredVideo: { type: "drive", id: "" },
 
@@ -588,39 +601,66 @@ const io = new IntersectionObserver(entries => {
 },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-/* ---------- shows from Google Sheets ---------- */
+/* ---------- shows (Google Sheet + extraShows) ---------- */
 (async function loadShows(){
   const table = document.getElementById('shows-table');
+  const ST = {texas:'TX', arkansas:'AR', oklahoma:'OK', louisiana:'LA'};
+  const norm = s => String(s||'').trim();
+  let list = [];
+
+  // 1) Google Sheet rows (Date, Venue, City, State, Ticket URL, Status, Notes)
   try {
     const res = await fetch(CONFIG.showsCSV, {cache:'no-store'});
-    if (!res.ok) throw new Error('fetch failed');
-    const text = await res.text();
-    const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
-    if (rows.length < 2) throw new Error('no rows');
-    const head = rows[0].map(h => h.toLowerCase().trim());
-    const idx = {
-      date:  head.findIndex(h => h.includes('date')),
-      venue: head.findIndex(h => h.includes('venue') || h.includes('event')),
-      city:  head.findIndex(h => h.includes('city') || h.includes('location')),
-      link:  head.findIndex(h => h.includes('ticket') || h.includes('link') || h.includes('url')),
-    };
-    const shows = rows.slice(1).filter(r => (r[idx.venue]||'').trim() || (r[idx.date]||'').trim());
-    if (!shows.length) { empty(table); return; }
-    table.innerHTML = shows.map(r => `
+    if (res.ok) {
+      const rows = parseCSV(await res.text()).filter(r => r.some(c => norm(c) !== ''));
+      const head = (rows[0]||[]).map(h => norm(h).toLowerCase());
+      const col = (...keys) => head.findIndex(h => keys.some(k => h.includes(k)));
+      const i = { date:col('date'), venue:col('venue','event'), city:col('city','location'),
+                  state:col('state'), link:col('ticket','link','url'), status:col('status'), notes:col('note') };
+      const get = (r,k) => i[k] > -1 ? norm(r[i[k]]) : '';
+      rows.slice(1).forEach(r => list.push({
+        date:get(r,'date'), venue:get(r,'venue'), city:get(r,'city'), state:get(r,'state'),
+        link:get(r,'link'), status:get(r,'status'), notes:get(r,'notes')
+      }));
+    }
+  } catch(e){ /* sheet unreachable — extraShows below still render */ }
+
+  // 2) Dates added directly in CONFIG.extraShows
+  (CONFIG.extraShows || []).forEach(s => list.push(Object.assign({link:'',status:'',notes:'',state:''}, s)));
+
+  // Clean up: drop blanks + cancelled, parse dates, drop past, de-dupe, sort soonest-first
+  const today = new Date(); today.setHours(0,0,0,0);
+  const seen = new Set();
+  list = list
+    .filter(s => s.venue || s.date)
+    .filter(s => !/cancel/i.test(s.status))
+    .map(s => Object.assign(s, { d: parseShowDate(s.date) }))
+    .filter(s => !s.d || s.d >= today)
+    .filter(s => { const k = (s.d ? s.d.toDateString() : s.date) + '|' + s.venue.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; })
+    .sort((a,b) => !a.d ? 1 : !b.d ? -1 : a.d - b.d);
+
+  if (!list.length) {
+    table.innerHTML = '<div class="shows-empty">New dates are being confirmed — follow along on socials for announcements.</div>';
+    return;
+  }
+  table.innerHTML = list.map(s => {
+    const dateHTML = s.d
+      ? `${esc(s.d.toLocaleDateString('en-US',{month:'short',day:'numeric'}))}<small>${esc(s.d.toLocaleDateString('en-US',{weekday:'short'}))} · ${s.d.getFullYear()}</small>`
+      : esc(s.date || 'TBA');
+    const st = ST[s.state.toLowerCase()] || s.state;
+    const where = [s.city, st].filter(Boolean).join(', ');
+    return `
       <div class="show-row">
-        <div class="show-date">${esc(r[idx.date]||'TBA')}</div>
-        <div class="show-venue">${esc(r[idx.venue]||'')}</div>
-        <div class="show-city">${esc(r[idx.city]||'')}</div>
+        <div class="show-date">${dateHTML}</div>
+        <div class="show-venue">${esc(s.venue)}${s.notes ? `<span class="show-notes">${esc(s.notes)}</span>` : ''}</div>
+        <div class="show-city">${esc(where)}</div>
         <div class="show-link">${
-          idx.link > -1 && (r[idx.link]||'').trim().startsWith('http')
-            ? `<a href="${esc(r[idx.link].trim())}" target="_blank" rel="noopener">Tickets</a>`
+          s.link.startsWith('http')
+            ? `<a href="${esc(s.link)}" target="_blank" rel="noopener">Tickets</a>`
             : `<a href="#booking">Info</a>`
         }</div>
-      </div>`).join('');
-  } catch(e){ empty(table); }
-  function empty(t){
-    t.innerHTML = '<div class="shows-empty">New dates are being confirmed — follow along on socials for announcements.</div>';
-  }
+      </div>`;
+  }).join('');
 })();
 function parseCSV(text){
   const rows=[]; let row=[], cell='', q=false;
@@ -636,6 +676,20 @@ function parseCSV(text){
   return rows;
 }
 function esc(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function parseShowDate(str){
+  const s = String(str||'').trim();
+  if (!s) return null;
+  // ISO yyyy-mm-dd → LOCAL midnight (new Date('2026-10-13') is UTC and lands on the previous evening in Texas)
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  // M/D/YYYY or M-D-YY
+  m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if (m) { const y = m[3].length === 2 ? 2000 + +m[3] : +m[3]; return new Date(y, +m[1]-1, +m[2]); }
+  // "October 9, 2026", "Oct 9 2026"
+  const d = new Date(s);
+  if (!isNaN(d)) return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  return null; // unparseable → treated as TBA, sinks to the bottom
+}
 
 /* ---------- featured video ---------- */
 (function(){
