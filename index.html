@@ -225,9 +225,6 @@ h2 em{font-style:italic;color:var(--rose-bright)}
 .show-city{color:var(--parchment-dim)}
 .show-link a{text-decoration:none;border:1px solid var(--line);padding:9px 16px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;transition:.2s;color:var(--parchment-dim)}
 .show-link a:hover{border-color:var(--parchment);color:var(--parchment)}
-.bit-wrap{margin-top:54px;font-family:var(--mono)}
-.bit-wrap .bit-widget{font-family:var(--mono)!important}
-.bit-wrap .bit-venue,.bit-wrap .bit-event-data.bit-venue{font-family:var(--serif)!important}
 .shows-empty{padding:60px 0;text-align:center;color:var(--parchment-dim);font-family:var(--mono);font-size:.85rem;letter-spacing:.14em}
 
 /* ---------- videos ---------- */
@@ -440,23 +437,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose-bright);outlin
     <p class="sec-eyebrow reveal">On the Road</p>
     <h2 class="reveal">Catch him <em>live.</em></h2>
     <p class="lede reveal">Dates update automatically as new shows are confirmed.</p>
-    <!-- Bandsintown is the source of truth once it has dates; the sheet list below is the fallback -->
-    <div class="bit-wrap" id="bit-wrap" hidden>
-      <a class="bit-widget-initializer"
-        data-artist-name="id_15670902"
-        data-display-local-dates="false"
-        data-display-past-dates="false"
-        data-auto-style="false"
-        data-text-color="#F0E4C8"
-        data-link-color="#C93A2D"
-        data-background-color="rgba(0,0,0,0)"
-        data-display-limit="20"
-        data-display-start-time="true"
-        data-link-text-color="#F0E4C8"
-        data-display-lineup="false"
-        data-display-play-my-city="true"
-        data-separator-color="rgba(240,228,200,0.14)"></a>
-    </div>
     <div class="shows-table reveal" id="shows-table">
       <div class="shows-empty">Loading dates…</div>
     </div>
@@ -621,33 +601,6 @@ const io = new IntersectionObserver(entries => {
 },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-/* ---------- shows: Bandsintown widget first, sheet list as fallback ---------- */
-(function bandsintown(){
-  const wrap = document.getElementById('bit-wrap');
-  const table = document.getElementById('shows-table');
-  const s = document.createElement('script');
-  s.src = 'https://widgetv3.bandsintown.com/main.min.js';
-  s.charset = 'utf-8';
-  s.async = true;
-  document.body.appendChild(s);
-  // Swap to the widget only once it has actually rendered an upcoming event;
-  // until then (or if Bandsintown is unreachable) the sheet list stays up.
-  wrap.hidden = false; wrap.style.position = 'absolute'; wrap.style.visibility = 'hidden';
-  const hasEvents = () => !/no upcoming/i.test(wrap.innerText) &&
-    wrap.querySelector('a[href*="bandsintown.com/e/"], a[href*="bandsintown.com/t/"], .bit-event-data, .bit-event');
-  let tries = 0;
-  const check = setInterval(() => {
-    if (hasEvents()) {
-      clearInterval(check);
-      wrap.style.position = ''; wrap.style.visibility = '';
-      table.hidden = true;
-    } else if (++tries > 20) {
-      clearInterval(check);
-      wrap.hidden = true;
-    }
-  }, 500);
-})();
-
 /* ---------- shows (Google Sheet + extraShows) ---------- */
 (async function loadShows(){
   const table = document.getElementById('shows-table');
@@ -655,8 +608,26 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   const norm = s => String(s||'').trim();
   let list = [];
 
-  // 1) Google Sheet rows (Date, Venue, City, State, Ticket URL, Status, Notes)
+  // 0) Bandsintown (via /api/shows) is the source of truth whenever it has upcoming dates
   try {
+    const r = await fetch('/api/shows', {cache:'no-store'});
+    if (r.ok) {
+      const { events = [] } = await r.json();
+      events.forEach(e => {
+        const day = String(e.datetime||'').slice(0,10);
+        const t = String(e.datetime||'').slice(11,16);
+        const time = t && t !== '00:00' ? new Date('2000-01-01T'+t).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : '';
+        const withWho = e.lineup && e.lineup.length ? 'w/ ' + e.lineup.join(' & ') : '';
+        list.push({ date:day, venue:e.venue, city:e.city, state:e.region || e.country,
+          link: e.ticket || e.url, linkLabel: e.ticket ? (/free/i.test(e.ticketType) ? 'RSVP' : 'Tickets') : 'Details',
+          status:'', notes:[time, withWho].filter(Boolean).join(' · ') });
+      });
+    }
+  } catch(e){ /* Bandsintown unreachable — fall back to the sheet below */ }
+  const fromBIT = list.length > 0;
+
+  // 1) Google Sheet rows (Date, Venue, City, State, Ticket URL, Status, Notes) — fallback only
+  if (!fromBIT) try {
     const res = await fetch(CONFIG.showsCSV, {cache:'no-store'});
     if (res.ok) {
       const rows = parseCSV(await res.text()).filter(r => r.some(c => norm(c) !== ''));
@@ -673,7 +644,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   } catch(e){ /* sheet unreachable — extraShows below still render */ }
 
   // 2) Dates added directly in CONFIG.extraShows
-  (CONFIG.extraShows || []).forEach(s => list.push(Object.assign({link:'',status:'',notes:'',state:''}, s)));
+  if (!fromBIT) (CONFIG.extraShows || []).forEach(s => list.push(Object.assign({link:'',status:'',notes:'',state:''}, s)));
 
   // Clean up: drop blanks + cancelled, parse dates, drop past, de-dupe, sort soonest-first
   const today = new Date(); today.setHours(0,0,0,0);
@@ -703,7 +674,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
         <div class="show-city">${esc(where)}</div>
         <div class="show-link">${
           s.link.startsWith('http')
-            ? `<a href="${esc(s.link)}" target="_blank" rel="noopener">Tickets</a>`
+            ? `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.linkLabel || 'Tickets')}</a>`
             : `<a href="#booking">Info</a>`
         }</div>
       </div>`;
