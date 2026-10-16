@@ -443,7 +443,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--rose-bright);outlin
     <!-- Bandsintown is the source of truth once it has dates; the sheet list below is the fallback -->
     <div class="bit-wrap" id="bit-wrap" hidden>
       <a class="bit-widget-initializer"
-        data-artist-name="Grady Maguire"
+        data-artist-name="id_15670902"
         data-display-local-dates="false"
         data-display-past-dates="false"
         data-auto-style="false"
@@ -633,7 +633,8 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   // Swap to the widget only once it has actually rendered an upcoming event;
   // until then (or if Bandsintown is unreachable) the sheet list stays up.
   wrap.hidden = false; wrap.style.position = 'absolute'; wrap.style.visibility = 'hidden';
-  const hasEvents = () => wrap.querySelector('a[href*="bandsintown.com/e/"], a[href*="bandsintown.com/t/"], [class*="bit-event"]:not([class*="no-dates"])');
+  const hasEvents = () => !/no upcoming/i.test(wrap.innerText) &&
+    wrap.querySelector('a[href*="bandsintown.com/e/"], a[href*="bandsintown.com/t/"], .bit-event-data, .bit-event');
   let tries = 0;
   const check = setInterval(() => {
     if (hasEvents()) {
