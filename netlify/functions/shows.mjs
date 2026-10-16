@@ -20,8 +20,8 @@ export default async () => {
       title: e.title || '',
       description: e.description || '',
       lineup: (e.lineup || []).filter(n => n && n.toLowerCase() !== 'grady maguire'),
-      url: e.url || '',
-      ticket: (e.offers || []).find(o => o.url)?.url || '',
+      url: clean(e.url),
+      ticket: clean((e.offers || []).find(o => o.url)?.url),
       ticketType: (e.offers || []).find(o => o.url)?.type || '',
     }));
     return json({ events });
@@ -29,6 +29,12 @@ export default async () => {
     return json({ error: String(err), events: [] }, 502);
   }
 };
+
+// keep the app id out of public links
+function clean(u) {
+  if (!u) return '';
+  try { const x = new URL(u); x.searchParams.delete('app_id'); return x.toString(); } catch { return ''; }
+}
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
